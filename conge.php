@@ -131,23 +131,38 @@ function test_input($data) {
 
                 <div class="mb-3">
                     <label for="start_date" class="form-label">Date debut</label>
-                    <input class="form-control" type="date" name="start_date" id="start_date"
+                    <input class="form-control <?php echo !empty($start_dateErr) ? 'is-invalid' : ''; ?>" type="date" name="start_date" id="start_date"
                     value="<?php echo htmlspecialchars($start_date); ?>"
                     >
-                        <!-- class="form-control <?php echo !empty($emailErr) ? 'is-invalid' : ''; ?>" -->
+                    <?php if (!empty($start_dateErr)): ?>
+                        <div class="invalid-feedback">
+                            <?php echo $start_dateErr; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="mb-3">
                     <label for="end_date" class="form-label">Date fin</label>
                     <input type="date" name="end_date" id="end_date"
-                        class="form-control <?php echo !empty($passwordErr) ? 'is-invalid' : ''; ?>"
+                        class="form-control <?php echo !empty($end_dateErr) ? 'is-invalid' : ''; ?>"
                         >
+                        <?php if (!empty($end_dateErr)): ?>
+                        <div class="invalid-feedback">
+                            <?php echo $end_dateErr; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
+
 
                 <div class="mb-3">
                     <label for="raison" class="form-label">Raison</label>
-                    <input type="text" class="form-control" name="raison" id="raison"
+                    <input type="text" class="form-control <?php echo !empty($end_dateErr) ? 'is-invalid' : ''; ?>" name="raison" id="raison"
                     >
+                    <?php if (!empty($raisonErr)): ?>
+                        <div class="invalid-feedback">
+                            <?php echo $raisonErr; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Submit</button>
