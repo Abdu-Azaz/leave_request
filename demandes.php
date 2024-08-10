@@ -22,6 +22,7 @@ if ($rh_email) {
 // Handle approval or rejection of congé requests
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $_SESSION['rh_email'] = $rh_email;
     $start_date = mysqli_real_escape_string($conn, $_POST['start_date']);
     $action = $_POST['action'];
 
@@ -88,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <td><?php echo htmlspecialchars($cong["etat"]); ?></td>
                         <td>
                             <!-- Add a form for each button or a link with query parameters -->
-                            <form method="POST" action="process_conge.php">
+                            <form method="POST" action="<?php  echo $_SERVER["PHP_SELF"] ?>">
                                 <input type="hidden" name="email" value="<?php echo htmlspecialchars($cong["email"]); ?>">
                                 <input type="hidden" name="start_date"
                                     value="<?php echo htmlspecialchars($cong["start_date"]); ?>">
