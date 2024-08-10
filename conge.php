@@ -1,7 +1,6 @@
-
 <?php
 session_start();
-require_once("connect_db.php");
+require_once ("connect_db.php");
 
 if (!isset($_SESSION['email'])) {
     header("Location: login.php"); // Redirect to login page if not logged in
@@ -12,14 +11,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $start_date = $end_date = $raison = "";
     $start_dateErr = $end_dateErr = $raisonErr = "";
 
-    if (empty($_POST["start_date"])) $start_dateErr = "Date de début est requise";
-    else $start_date = test_input($_POST["start_date"]);
+    if (empty($_POST["start_date"]))
+        $start_dateErr = "Date de début est requise";
+    else
+        $start_date = test_input($_POST["start_date"]);
 
-    if (empty($_POST["end_date"])) $end_dateErr = "Date de fin est requise";
-    else $end_date = test_input($_POST["end_date"]);
+    if (empty($_POST["end_date"]))
+        $end_dateErr = "Date de fin est requise";
+    else
+        $end_date = test_input($_POST["end_date"]);
 
-    if (empty($_POST["raison"])) $raisonErr = "Raison est requise";
-    else $raison = test_input($_POST["raison"]);
+    if (empty($_POST["raison"]))
+        $raisonErr = "Raison est requise";
+    else
+        $raison = test_input($_POST["raison"]);
 
     if (empty($start_dateErr) && empty($end_dateErr) && empty($raisonErr)) {
         $email = $_SESSION['email'];
@@ -60,7 +65,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-function test_input($data) {
+function test_input($data)
+{
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
@@ -80,33 +86,9 @@ function test_input($data) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Gestion de congés</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php">Se connecter</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php">S'enregistrer</a>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </nav>
+    <?php
+    require ('navbar.php')
+        ?>
 
     <div class="container">
         <div class="mt-4 text-center">
@@ -119,21 +101,20 @@ function test_input($data) {
                 action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <?php if ($success): ?>
                     <div class="alert alert-info alert-dismissible fade show" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            <strong>Form submitted successfully</strong>
-                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <strong>Form submitted successfully</strong>
+                    </div>
                     <?php
                     $success = 0;
-                     $emailErr = $passwordErr = "";
+                    $emailErr = $passwordErr = "";
 
                 endif; ?>
-                
+
 
                 <div class="mb-3">
                     <label for="start_date" class="form-label">Date debut</label>
-                    <input class="form-control <?php echo !empty($start_dateErr) ? 'is-invalid' : ''; ?>" type="date" name="start_date" id="start_date"
-                    value="<?php echo htmlspecialchars($start_date); ?>"
-                    >
+                    <input class="form-control <?php echo !empty($start_dateErr) ? 'is-invalid' : ''; ?>" type="date"
+                        name="start_date" id="start_date" value="<?php echo htmlspecialchars($start_date); ?>">
                     <?php if (!empty($start_dateErr)): ?>
                         <div class="invalid-feedback">
                             <?php echo $start_dateErr; ?>
@@ -144,9 +125,8 @@ function test_input($data) {
                 <div class="mb-3">
                     <label for="end_date" class="form-label">Date fin</label>
                     <input type="date" name="end_date" id="end_date"
-                        class="form-control <?php echo !empty($end_dateErr) ? 'is-invalid' : ''; ?>"
-                        >
-                        <?php if (!empty($end_dateErr)): ?>
+                        class="form-control <?php echo !empty($end_dateErr) ? 'is-invalid' : ''; ?>">
+                    <?php if (!empty($end_dateErr)): ?>
                         <div class="invalid-feedback">
                             <?php echo $end_dateErr; ?>
                         </div>
@@ -156,8 +136,8 @@ function test_input($data) {
 
                 <div class="mb-3">
                     <label for="raison" class="form-label">Raison</label>
-                    <input type="text" class="form-control <?php echo !empty($end_dateErr) ? 'is-invalid' : ''; ?>" name="raison" id="raison"
-                    >
+                    <input type="text" class="form-control <?php echo !empty($end_dateErr) ? 'is-invalid' : ''; ?>"
+                        name="raison" id="raison">
                     <?php if (!empty($raisonErr)): ?>
                         <div class="invalid-feedback">
                             <?php echo $raisonErr; ?>

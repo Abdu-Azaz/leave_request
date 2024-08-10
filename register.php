@@ -1,27 +1,35 @@
 <?php
-require_once("connect_db.php");
+require_once ("connect_db.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nom = $prenom = $email = $password = "";
     $nomErr = $prenomErr = $emailErr = $passwordErr = "";
-    
+
     // Validate input
-    if (empty($_POST["nom"])) $nomErr = "Nom est requis";
-    else $nom = test_input($_POST["nom"]);
+    if (empty($_POST["nom"]))
+        $nomErr = "Nom est requis";
+    else
+        $nom = test_input($_POST["nom"]);
 
-    if (empty($_POST["prenom"])) $prenomErr = "Prénom est requis";
-    else $prenom = test_input($_POST["prenom"]);
+    if (empty($_POST["prenom"]))
+        $prenomErr = "Prénom est requis";
+    else
+        $prenom = test_input($_POST["prenom"]);
 
-    if (empty($_POST["email"])) $emailErr = "Email est requis";
+    if (empty($_POST["email"]))
+        $emailErr = "Email est requis";
     else {
         $email = test_input($_POST["email"]);
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $emailErr = "Email est invalide";
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+            $emailErr = "Email est invalide";
     }
 
-    if (empty($_POST["password"])) $passwordErr = "Mot de passe est requis";
+    if (empty($_POST["password"]))
+        $passwordErr = "Mot de passe est requis";
     else {
         $password = test_input($_POST["password"]);
-        if (strlen($password) < 8) $passwordErr = "Mot de passe doit être au minimum 8 caractères";
+        if (strlen($password) < 8)
+            $passwordErr = "Mot de passe doit être au minimum 8 caractères";
     }
 
     if (empty($nomErr) && empty($prenomErr) && empty($emailErr) && empty($passwordErr)) {
@@ -51,7 +59,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-function test_input($data) {
+function test_input($data)
+{
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
@@ -72,33 +81,9 @@ function test_input($data) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Gestion de congés</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php">Se connecter</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php">S'enregistrer</a>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </nav>
+    <?php
+    require ('navbar.php')
+        ?>
 
     <div class="container">
         <div class="mt-4 text-center">
@@ -111,9 +96,9 @@ function test_input($data) {
                 action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <?php if ($success): ?>
                     <div class="alert alert-info alert-dismissible fade show" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            <strong>Form submitted successfully</strong>
-                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <strong>Form submitted successfully</strong>
+                    </div>
                     <?php
                     $success = 0;
                     $nomErr = $prenomErr = $emailErr = $passwordErr = "";
@@ -174,6 +159,7 @@ function test_input($data) {
                 <div class="mb-3">
                     <label for="status" class="form-label">Status</label>
                     <select class="form-control" name="status" id="status">
+                        <option value="rh">RH</option>
                         <option value="titulaire">Titulaire</option>
                         <option value="stagiaire">Stagiaire</option>
                     </select>

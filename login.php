@@ -1,17 +1,23 @@
-
 <?php
 session_start();
-require_once("connect_db.php");
+require_once ("connect_db.php");
+
+$email = $password = "";
+$emailErr = $passwordErr = "";
+$success = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $password = "";
-    $emailErr = $passwordErr = "";
+    if (empty($_POST["email"])) {
+        $emailErr = "Email est requis";
+    } else {
+        $email = test_input($_POST["email"]);
+    }
 
-    if (empty($_POST["email"])) $emailErr = "Email est requis";
-    else $email = test_input($_POST["email"]);
-
-    if (empty($_POST["password"])) $passwordErr = "Mot de passe est requis";
-    else $password = test_input($_POST["password"]);
+    if (empty($_POST["password"])) {
+        $passwordErr = "Mot de passe est requis";
+    } else {
+        $password = test_input($_POST["password"]);
+    }
 
     if (empty($emailErr) && empty($passwordErr)) {
         $email = mysqli_real_escape_string($conn, $email);
@@ -21,8 +27,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
             if ($password == $row['password']) {
-                $_SESSION['email'] = $email;
-                header("Location: conge.php"); // Redirect to congé page
+                $success = true;
+                if ($row['status'] == 'rh') {
+                    $_SESSION['rh_email'] = $email;
+                    header("Location: demandes.php"); // Redirect to RH page
+                } else {
+                    $_SESSION['email'] = $email;
+                    header("Location: conge.php"); // Redirect to congé page
+                }
                 exit();
             } else {
                 $passwordErr = "Mot de passe incorrect";
@@ -41,6 +53,7 @@ function test_input($data) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,33 +66,9 @@ function test_input($data) {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Gestion de congés</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php">Se connecter</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php">S'enregistrer</a>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </nav>
+    <?php
+    require ('navbar.php')
+        ?>
 
     <div class="container">
         <div class="mt-4 text-center">
@@ -92,15 +81,14 @@ function test_input($data) {
                 action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                 <?php if ($success): ?>
                     <div class="alert alert-info alert-dismissible fade show" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            <strong>Form submitted successfully</strong>
-                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <strong>Form submitted successfully</strong>
+                    </div>
                     <?php
                     $success = 0;
-                     $emailErr = $passwordErr = "";
-
+                    $emailErr = $passwordErr = "";
                 endif; ?>
-                
+
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
